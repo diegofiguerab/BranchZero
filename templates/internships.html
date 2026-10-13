@@ -6,7 +6,33 @@
 <body>
     <h1>My Internship Applications</h1> 
     <p>Your first opportunity starts here. Track every step of your internship journey.</p> 
-    <p>Company: {{ company }}</p>
+
+    <h2>Add New Application</h2>
+
+    <form method="POST">
+        <label for="company">Company:</label>
+        <input type="text" id="company" name="company" required>
+
+        <label for="position">Position:</label>
+        <input type="text" id="position" name="position" required>
+
+        <label for="status">Status:</label>
+        <input type="text" id="status" name="status" required>
+
+        <button type="submit">Add Application</button>
+    </form>
+
+
+    <h2>My Applications</h2>
+    
+
+    {% for job in jobs %}
+        <p>Company: {{ job["company"] }}</p>
+        <p>Position: {{ job["position"] }}</p>
+        <p>Status: {{ job["status"] }}</p>
+
+    {% endfor %}
+
     <a href="/">Back to Home</a>
 </body>
 </html>
