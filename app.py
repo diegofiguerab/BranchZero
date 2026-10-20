@@ -16,6 +16,31 @@ def save_jobs():
     with open("jobs.json", "w") as file:
         json.dump(jobs, file)
 
+def assign_missing_ids():
+    # Collect IDs from existing applications
+    ids = []
+
+    for job in jobs:
+        if "id" in job:
+            ids.append(job["id"])
+
+    # Find the next available ID
+    if not ids:
+        new_id = 1
+    else:
+        new_id = max(ids) + 1
+
+    # Assign unique IDs to applications missing one
+    for job in jobs:
+        if "id" not in job:
+            job["id"] = new_id
+            new_id += 1
+
+    # Save updated applications to jobs.json
+    save_jobs()
+
+assign_missing_ids()
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -34,9 +59,7 @@ def internships():
         }
 
         jobs.append(new_job)
-        save_jobs()
+        assign_missing_ids()
         return redirect(url_for("internships"))
 
     return render_template("internships.html", jobs=jobs)
-
-
