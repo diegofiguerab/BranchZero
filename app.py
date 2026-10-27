@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort
 import json
 
 app = Flask(__name__)
@@ -63,3 +63,28 @@ def internships():
         return redirect(url_for("internships"))
 
     return render_template("internships.html", jobs=jobs)
+
+# Handles status updates for a specific application using its ID
+
+@app.route("/internships/<int:job_id>/status", methods=["POST"])
+def update_status(job_id):
+    allowed_statuses = [
+        "Interested",
+        "Applied",
+        "In Progress",
+        "Interview",
+        "Offer",
+        "Denied"
+    ]
+
+    for job in jobs:
+        if job["id"] == job_id:
+            new_status = request.form["status"]
+
+            if new_status not in allowed_statuses:
+                abort(400)
+
+            job["status"] = new_status
+            save_jobs()
+            return redirect(url_for("internships"))
+    abort(404)

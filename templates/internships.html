@@ -27,9 +27,23 @@
     
 
     {% for job in jobs %}
+        <p>ID: {{ job["id"] }}</p>
         <p>Company: {{ job["company"] }}</p>
         <p>Position: {{ job["position"] }}</p>
         <p>Status: {{ job["status"] }}</p>
+
+        <form method="POST" action="/internships/{{ job['id'] }}/status">
+            <select name="status">
+                <option value="Interested" {% if job["status"] == "Interested" %}selected{% endif %}>Interested</option>
+                <option value="Applied" {% if job["status"] == "Applied" %}selected{% endif %}>Applied</option>
+                <option value="In Progress" {% if job["status"] == "In Progress" %}selected{% endif %}>In Progress</option>
+                <option value="Interview" {% if job["status"] == "Interview" %}selected{% endif %}>Interview</option>
+                <option value="Offer" {% if job["status"] == "Offer" %}selected{% endif %}>Offer</option>
+                <option value="Denied" {% if job["status"] == "Denied" %}selected{% endif %}>Denied</option>
+            </select>
+
+            <button type="submit">Save Status</button>
+        </form>
 
     {% endfor %}
 
